@@ -6,11 +6,11 @@
 
 ## Business Problem
 
-South by Southwest (SXSW) is an annual conference in Austin, TX where creative industries converge to showcase innovations in technology and the creative arts, attended by tens to hundreds of thousands of people. The company that organizes it, SXSW LLC may be able to enhance the experience of attendees by analyzing their sentiments from posts shared online during past conference. Doing so will allow the organizers to gain an understanding of the public opinion behind certain events and companies that they features. Using public Twitter data, I describe patterns and topics that emerge and detect negative, neutral, and positive sentiments from thousands of tweets.
+South by Southwest (SXSW) is an annual conference where creative industries converge to showcase innovations in technology and the creative arts. The company that organizes the conference may be able to enhance customer experience by detecting and understanding sentiments of the attendees from past conference. Doing so will allow them to gain an understanding of the public opinion about events and brands featured at the conference. Using Twitter data I describe patterns and topics that emerge about the conference and Apple and Google products in particular at the SXSW 2011.
 
 ## Data Understanding
 
-The Twitter dataset ([data file](https://github.com/czarinagluna/sxsw-sentiment-analysis/tree/main/data)) is composed of over 9,000 tweets about SXSW 2011 labeled as `negative`, `positive`, or `no emotion`. The tweets are the independent feature used to predict the multiclass sentiments. One other feature on the dataset is `emotion_in_tweet_is_directed_at`, which identifies Apple and Google products mentioned in the tweets. However almost 6,000 of the tweets are missing the product values, and so the feature will not be used later.
+The Twitter dataset ([file](https://github.com/czarinagluna/sxsw-sentiment-analysis/tree/main/data)) contains over 9,000 tweets shared during the SXSW 2011 and labeled as `negative`, `positive`, or `no emotion`. To predict the multiclass sentiments NLP is applied to the text data for processing and analysis of the tweets:
 
 ### Natural Language Processing
 
@@ -33,44 +33,50 @@ RT @mention Mayer: 20% of Google searches are for local information #SXSW ^pr
 # Result
 ['mayer', 'search', 'local', 'information']
 ```
-### Data Visualization
 
-To highlight significant textual data points, the data visualization technique `WordCloud` is used, which represents text data and indicates frequencies by the size of the words.
+***
 
-![](data/images/fig6.png)
+To highlight significant textual data points, I use the data visualization technique `WordCloud` which represents the text data and indicates frequencies by the size of words:
 
-Positive sentiments about Apple such as the `pop-up` store at the conference. 
+- **Positive sentiments about Apple** such as the `pop-up` store at the conference.
 
-![](data/images/fig7.png)
+<img src='data/images/fig6.png' width='300x'>
 
-Negative sentiments toward Apple such as Kara Swisher's line `Apple is a fascist company` during an [interview](https://www.theguardian.com/technology/pda/2011/mar/13/flipboard-sxsw-2011) which was quoted all over Twitter. 
+- **Negative sentiments toward Apple** such as Kara Swisher's line `Apple is a fascist company` during an [interview](https://www.theguardian.com/technology/pda/2011/mar/13/flipboard-sxsw-2011) which was quoted all over Twitter.  
 
-![](data/images/fig8.png)
+<img src='data/images/fig7.png' width='300x'>
 
-Positive sentiments about Google such as `Marissa Meyer` who was a keynote at the conference.
+- **Positive sentiments about Google** such as `Marissa Meyer` who was a keynote at the conference.
 
-![](data/images/fig9.png)
+<img src='data/images/fig8.png' width='300x'>
 
-Negative sentiments toward Google such as the words `caring much` mentioned by Tim O'Reilly in one of the opening sessions. The [quote](https://www.forbes.com/sites/davidewalt/2011/03/11/tim-oreilly-speaks-at-sxsw/?sh=16c5913721ec) for context:
+- **Negative sentiments toward Google** such as the words `caring much` mentioned by Tim O'Reilly in one of the opening sessions. 
+
+<img src='data/images/fig9.png' width='300x'>
+
+Full [quote](https://www.forbes.com/sites/davidewalt/2011/03/11/tim-oreilly-speaks-at-sxsw/?sh=16c5913721ec) for context:
 > I think that Google lost its way by trying to care too much for its business as opposed to caring about their users and their value to the world. And Larry [Page] has that.
+
 
 ## Data Modeling
 
-The classification models used are Logistic Regression, Multinomial Naive Bayes, Decision Tree, Random Forests, Extra Trees, and Gradient Boost classifier. The class imbalance is addressed using random oversampling which randomly duplicates examples of the minority classes in the training set. To optimize the models, a grid search ([notebook](https://github.com/czarinagluna/sxsw-sentiment-analysis/blob/main/gridsearch.ipynb)) is performed to tune their hyperparameters.
-
-### Classification Models
-
-![](data/images/fig13.png)
-
-The Support Vector Machine for classification reaches the best cross validation score of 0.8726 followed closely by the Extra Trees with only 0.0024 difference, but the final evaluation on the test set shows that the Tuned Extra Trees classifier attains the highest score of 68.5% accuracy.
+The **Classification Models** used are Logistic Regression, Multinomial Naive Bayes, Decision Tree, Random Forests, Extra Trees, Gradient Boost, Support Vector Machine, and Stochastic Gradient Descent classifier. To adress the class imbalance I perform random oversampling by randomly duplicating examples of the minority classes in the training set. Then a grid search ([notebook](https://github.com/czarinagluna/sxsw-sentiment-analysis/blob/main/gridsearch.ipynb)) is implemented to optimize the models by tuning their hyperparameters.
 
 ### Clustering Analysis
 
-Clustering text documents using the K-Means clustering algorithm is completed on a separate notebook ([link](https://github.com/czarinagluna/Twitter-Sentiment-Analysis/blob/main/Clustering.ipynb)). The words are vectorized using the `Word2Vec` model and to reduce dimensionality, Principal Component Analysis `PCA` is applied to the word vectors, which are then stored in a dataframe with the `x_values` and `y_values`. Using the open source data mining toolkit [Orange](https://orangedatamining.com/), I explore a range of different *k* values and visualize them in the separate notebook ([link](https://github.com/czarinagluna/Twitter-Sentiment-Analysis/blob/main/Clustering.ipynb)).
+Text clustering is completed ([notebook](https://github.com/czarinagluna/Twitter-Sentiment-Analysis/blob/main/Clustering.ipynb)) using the **K-Means clustering algorithm**. First the text data is vectorized using the `Word2Vec` model. Then to reduce dimensionality Principal Component Analysis is fit to the word vectors. The dataframe with `x_values` and `y_values` is shown below. Lastly I use the open source data mining toolkit [Orange](https://orangedatamining.com/) to explore a range of different *k* values.
 
-Here, I set the number of clusters to 6:
+Here I set the number of clusters to 6:
 
-![](data/images/k=6.png)
+|  | x_values | y_values | count | word | Cluster | Silhouette |
+|---:|---:|---:|---:|---:|---:|---:|
+| 71 | 4.232746 | -0.236558 | 1528.0 | store | C1 | 0.500000 |
+| 122 | 3.200685 | 3.263005 | 683.0 | launch | C3 | 0.688537 |
+| 124 | 3.783673 | 4.306313 | 663.0 | social | C3 | 0.702629 |
+| 36 | 4.860034 | -0.365946 | 598.0 | android | C5 | 0.577045 |
+| 127 | 3.717602 | 4.206253 | 587.0 | circle | C3 | 0.709477 |
+
+<img src='data/images/k=6.png' width='800x'>
 
 **Silhouette Scores**
 
@@ -83,44 +89,45 @@ Here, I set the number of clusters to 6:
 | C5 | 60 | 0.598980 |
 | C6 | 275 | 0.598727 |
 
-Sample:
-
-|  | x_values | y_values | count | word | Cluster | Silhouette |
-|---:|---:|---:|---:|---:|---:|---:|
-| 71 | 4.232746 | -0.236558 | 1528.0 | store | C1 | 0.500000 |
-| 122 | 3.200685 | 3.263005 | 683.0 | launch | C3 | 0.688537 |
-| 124 | 3.783673 | 4.306313 | 663.0 | social | C3 | 0.702629 |
-| 36 | 4.860034 | -0.365946 | 598.0 | android | C5 | 0.577045 |
-| 127 | 3.717602 | 4.206253 | 587.0 | circle | C3 | 0.709477 |
-
 ***
 
 Cluster `WordClouds`
 
 ![](data/images/clustering.png)
 
-Clustering shows interesting results. For instance, Cluster 3 contains the exact words describing a major event "possibly today" that was supposedly the launch of Google's major social network called Circles but which did **not** actually happen at the conference, and yet talked about all over Twitter. 
+Clustering shows interesting results. Cluster 3 for instance contains the exact words describing a major event that was supposedly the launch of Google's major social network called Circles "possibly today"—did *not* actually happen but still talked about a lot at the conference. 
 
 ## Results and Recommendations
 
-**Confusion Matrix**
+![](data/images/fig13.png)
+
+Across the chart the Extra Trees classifier attains the best cross validation score of 87% and the highest above at 69% accuracy on the final evaluation using the test set.
+
+***
+
+Comparing the confusion matrices of the models, the final model that performs best is the **Multinomial Naive Bayes**. 
 
 ![](data/images/multinomial.png)
 
-Comparing the confusion matrices of the models above, the final model that performs best is the **Multinomial Naive Bayes**. Though the Extra Trees classifier has a higher accuracy, it performs worse on the specific tasks of detecting negative and positive sentiments. 
+Though the Extra Trees classifier has a higher accuracy, it performs worse on the specific tasks of detecting negative and positive sentiments. 
 
 - The misclassification of negative sentiments can be *more costly* to the conference organizers and companies featured at the events if more negative sentiments are spread online and missed. 
-- The correct classification of positive sentiments can be more beneficial to understand and provide satisfaction to the attendees.
+- The correct classification of positive sentiments can be more beneficial to understanding of the users to continue to provide satisfaction to them.
+
+***
+
+The **Final Model** increases the number of True Negatives from the baseline model by half to 57% and the number of True Positives to 62% which are the highest among all the other models:
 
 ![](data/images/final.png)
 
-The **Final Model** increases the number of True Negatives from the baseline model by half to 57% and the number of True Positives to 62% which are the highest among all the other models. 
+### Recommendations
 
-**Recommendations** 
-
-- Detect sentiments during the conference using the machine learning model to predict positive and negative sentiments. Positive sentiments can be shared and negative sentiments can be addressed by responding to the concerns.
-- Present findings to the companies at the conference to receive feedback about their products and to provide better services the next year. Marketing for Google Circles can use the excitement and speculation during the conference for example.
-- Speakers at the conference can drive positive and negative sentiments so take advantage of the remarks that people talk about and use them to increase user engagement.
+- Detect sentiments during the conference using the machine learning model to predict positive and negative sentiments. 
+    - Positive sentiments can be shared and negative sentiments can be addressed by responding to the concerns.
+- Present findings to the companies at the conference to receive feedback as a guide to provide better services for next year. 
+    - Products such as Google Circles could use the excitement and speculation during the conference.
+- Highlight the remarks that drive positive sentiments as predicted by the model using natural language processing. 
+    - Quote the speakers to facilitate further discussion among attendees and increase user engagement.
 
 ***
 SOURCE CODE: [Main Notebook](https://github.com/czarinagluna/sxsw-sentiment-analysis/blob/main/main.ipynb)
