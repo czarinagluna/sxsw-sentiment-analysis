@@ -33,7 +33,6 @@ RT @mention Mayer: 20% of Google searches are for local information #SXSW ^pr
 # Result
 ['mayer', 'search', 'local', 'information']
 ```
-
 ### Data Visualization
 
 To highlight significant textual data points, the data visualization technique `WordCloud` is used, which represents text data and indicates frequencies by the size of the words.
@@ -61,21 +60,30 @@ The classification models used are Logistic Regression, Multinomial Naive Bayes,
 
 ### Classification Models
 
-**Model Performance**
-
 ![](data/images/fig13.png)
 
 The Support Vector Machine for classification reaches the best cross validation score of 0.8726 followed closely by the Extra Trees with only 0.0024 difference, but the final evaluation on the test set shows that the Tuned Extra Trees classifier attains the highest score of 68.5% accuracy.
 
 ### Clustering Analysis
 
-Clustering text documents using the K-Means clustering algorithm is completed on a separate notebook ([link](https://github.com/czarinagluna/Twitter-Sentiment-Analysis/blob/main/Clustering.ipynb)). The words are vectorized using the `Word2Vec` model and to reduce dimensionality, Principal Component Analysis `PCA` is applied to the word vectors, which are then stored in a dataframe with the $x$ and $y$ values. Using the open source data mining toolkit [Orange](https://orangedatamining.com/), I explore a range of different $k$ values and visualize them in the separate notebook ([link](https://github.com/czarinagluna/Twitter-Sentiment-Analysis/blob/main/Clustering.ipynb)).
+Clustering text documents using the K-Means clustering algorithm is completed on a separate notebook ([link](https://github.com/czarinagluna/Twitter-Sentiment-Analysis/blob/main/Clustering.ipynb)). The words are vectorized using the `Word2Vec` model and to reduce dimensionality, Principal Component Analysis `PCA` is applied to the word vectors, which are then stored in a dataframe with the `x_values` and `y_values`. Using the open source data mining toolkit [Orange](https://orangedatamining.com/), I explore a range of different *k* values and visualize them in the separate notebook ([link](https://github.com/czarinagluna/Twitter-Sentiment-Analysis/blob/main/Clustering.ipynb)).
 
 Here, I set the number of clusters to 6:
 
 ![](data/images/k=6.png)
 
-Sample silhouette scores:
+**Silhouette Scores**
+
+| Cluster | count | mean |
+|---:|---:|---:|
+| C1 | 1 | 0.500000 |
+| C2 | 544 | 0.671562 |
+| C3 | 8 | 0.694157 |
+| C4 | 112 | 0.621268 |
+| C5 | 60 | 0.598980 |
+| C6 | 275 | 0.598727 |
+
+Sample:
 
 |  | x_values | y_values | count | word | Cluster | Silhouette |
 |---:|---:|---:|---:|---:|---:|---:|
@@ -84,6 +92,8 @@ Sample silhouette scores:
 | 124 | 3.783673 | 4.306313 | 663.0 | social | C3 | 0.702629 |
 | 36 | 4.860034 | -0.365946 | 598.0 | android | C5 | 0.577045 |
 | 127 | 3.717602 | 4.206253 | 587.0 | circle | C3 | 0.709477 |
+
+***
 
 Cluster `WordClouds`
 
